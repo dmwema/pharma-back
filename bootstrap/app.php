@@ -98,7 +98,6 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
-$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class,);
 
 /*
 |--------------------------------------------------------------------------
@@ -130,7 +129,6 @@ $app->alias('mailer', Illuminate\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 $app->alias('JWTAuth', Tymon\JWTAuth\Facades\JWTAuth::class);
-$app->alias('JWTFactory', Tymon\JWTAuth\Facades\JWTFactory::class);
 
 
 return $app;
