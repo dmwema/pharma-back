@@ -130,5 +130,6 @@ $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 $app->alias('JWTAuth', Tymon\JWTAuth\Facades\JWTAuth::class);
 
+$app->configure('database');
 
 return $app;
