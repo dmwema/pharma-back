@@ -35,9 +35,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         $router->post('/login', ['as' => 'login', 'uses' => 'UserController@login']);
 
-        $router->post('/professor', function () {
-            return 'zerzer';
-        });
+        $router->post('/professor', ['as' => 'store_professor', 'uses' => 'ProfessorController@store']);
 
         $router->get('/professor', ['as' => 'all_professors', 'uses' => 'ProfessorController@index']);
 
