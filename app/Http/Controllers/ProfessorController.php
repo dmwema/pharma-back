@@ -36,7 +36,7 @@ class ProfessorController extends Controller
         $user->email = $request->email;
         $user->password = null;
 
-        return $request->middlename;
+        return $request;
 
         // store professor
         $professor = new Professor();
