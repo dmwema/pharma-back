@@ -62,7 +62,7 @@ class ProfessorController extends Controller
         return Professor::all();
     }
 
-    public function destroy($request)
+    public function destroy(Request $request)
     {
         return ['success' => true];
         $prof = Professor::find($request->id);
