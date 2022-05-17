@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 
-class TeacherController extends Controller
+class ProfessorController extends Controller
 {
     public function courses (Request $request) {
         $prof = Professor::findOrfail($request->teacher_id);
