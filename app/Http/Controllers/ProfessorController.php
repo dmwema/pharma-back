@@ -59,7 +59,7 @@ class ProfessorController extends Controller
 
     public function index()
     {
-        return Professor::with('user')->get();
+        return Professor::all();
     }
 
     public function destroy($request)
