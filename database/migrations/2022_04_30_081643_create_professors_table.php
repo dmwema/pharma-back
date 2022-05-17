@@ -16,11 +16,11 @@ return new class extends Migration
     {
         Schema::create('professors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('middlename');
             $table->string('gender');
-            $table->string('grade');
+            $table->string('grade')->nullable();
             $table->string('avatar')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
