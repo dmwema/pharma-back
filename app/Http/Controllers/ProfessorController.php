@@ -47,6 +47,7 @@ class ProfessorController extends Controller
         if ($user->professor_id = $professor->save()) {
             return [
                 "success" => true,
+                'profs' => Professor::all(),
                 "message" => "Professeur enrégistré avec succès"
             ];
         } else {
