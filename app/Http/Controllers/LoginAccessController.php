@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class LoginAccessController extends Controller
 {
-    public function generate () {
+        public function generate () {
         $link = $this->randomString(6, 'link');
         $secret = $this->randomString(8, 'secret');
 
