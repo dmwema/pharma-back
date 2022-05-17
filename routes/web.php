@@ -20,32 +20,31 @@ use App\Http\Controllers\MailController;
 $router->group(['middleware' => 'cors'], function () use ($router) {
 
     $router->group(['prefix' => 'api'], function () use ($router) {
-            
+
         $router->get('/', function () use ($router) {
             return $router->app->version();
         });
 
         $router->get('/generate', ['as' => 'generate', 'uses' => 'LoginAccessController@generate']);
-        
+
         $router->post('/check', ['as' => 'check', 'uses' => 'LoginAccessController@check']);
-        
+
         $router->post('/checklink', ['as' => 'checklink', 'uses' => 'LoginAccessController@checklink']);
-        
+
         $router->post('/edit-credentials', ['as' => 'editcredentials', 'uses' => 'UserController@edit_credentials']);
-        
+
         $router->post('/login', ['as' => 'login', 'uses' => 'UserController@login']);
-        
-        $router->post('/professor', ['as' => 'store_professor', 'uses' => 'ProfessorController@login']);
-        
+
+        $router->post('/professor', ['as' => 'store_professor', 'uses' => 'ProfessorController@store']);
+
         $router->get('/professor', ['as' => 'all_professors', 'uses' => 'ProfessorController@index']);
 
         $router->group(['prefix' => 'teacher'], function () use ($router) {
             $router->get('/courses/{teacher_id}', ['as' => 'teacher-courses', 'uses' => 'ProfessorController@courses']);
             $router->get('/works/{teacher_id}', ['as' => 'teacher-courses-works', 'uses' => 'ProfessorController@works']);
-            
+
             $router->post('/work', ['as' => 'add-work', 'uses' => 'AnnualWorkController@store']);
             $router->delete('/work', ['as' => 'delete-work', 'uses' => 'AnnualWorkController@destroy']);
         });
     });
 });
-
