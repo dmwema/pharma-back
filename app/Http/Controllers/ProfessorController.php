@@ -38,10 +38,11 @@ class ProfessorController extends Controller
 
         // store professor
         $professor = new Professor();
-        $professor->firstname = $request->firstname;
-        $professor->lastname = $request->lastname;
-        $professor->middlename = $request->middlename;
-        $professor->gender = $request->sexe;
+        $professor->firstname = ucfirst($request->firstname);
+        $professor->lastname = strtoupper($request->lastname);
+        $professor->middlename = strtoupper($request->middlename);
+        $professor->email = $request->email;
+        $professor->gender = strtoupper($request->sexe);
         $professor->user_id = $user->save();
 
         if ($user->professor_id = $professor->save()) {
