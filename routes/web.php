@@ -37,7 +37,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         $router->post('/professor', ['as' => 'store_professor', 'uses' => 'ProfessorController@store']);
 
-        $router->delete('/professor', ['as' => 'delete_professor', 'uses' => 'ProfessorController@destroy']);
+        $router->delete('/professor/{prof_id}', ['as' => 'delete_professor', 'uses' => 'ProfessorController@destroy']);
 
         $router->get('/professor', ['as' => 'all_professors', 'uses' => 'ProfessorController@index']);
 
