@@ -64,11 +64,12 @@ class ProfessorController extends Controller
 
     public function destroy($request)
     {
+        return ['success' => true];
         $prof = Professor::find($request->id);
 
         if ($prof->delete()) {
             return [
-                'sucess' => true,
+                'success' => true,
                 'message' => "Professeur supprimé avec succès"
             ];
         } else {
