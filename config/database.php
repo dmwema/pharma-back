@@ -40,7 +40,7 @@ return [
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => env('DB_PREFIX', ''),
         ],
-
+        /*
         'mysql' => [
             'driver' => 'mysql',
             'host' => 'db4free.net',
@@ -56,7 +56,7 @@ return [
             'engine' => env('DB_ENGINE'),
             'timezone' => env('DB_TIMEZONE', '+00:00'),
         ],
-
+        */
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'ec2-52-86-115-245.compute-1.amazonaws.com'),
