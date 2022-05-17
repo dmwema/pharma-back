@@ -11,13 +11,15 @@ use Illuminate\Http\Request;
 
 class ProfessorController extends Controller
 {
-    public function courses (Request $request) {
+    public function courses(Request $request)
+    {
         $prof = Professor::findOrfail($request->teacher_id);
         return response($prof->courses)
             ->header('Access-Control-Allow-Origin', '*');
-    } 
+    }
 
-    public function works (Request $request) {
+    public function works(Request $request)
+    {
         $courses = Course::with('annual_works')->where('current_prof_id', $request->teacher_id)->get();
 
         return [
@@ -25,14 +27,14 @@ class ProfessorController extends Controller
         ];
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $user = new User();
         $user->professor_id = null;
         $user->student_id = null;
         $user->password = null;
         $user->email = $request->email;
         $user->password = null;
-        $user->username = null;
 
         // store professor
         $professor = new Professor();
@@ -53,10 +55,10 @@ class ProfessorController extends Controller
                 "message" => "Erreu! une erreur est survenie lors de l'enrégistrement"
             ];
         }
-        
     }
 
-    public function index() {
+    public function index()
+    {
         return Professor::all();
     }
 }
