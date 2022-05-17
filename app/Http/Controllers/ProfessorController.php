@@ -69,7 +69,8 @@ class ProfessorController extends Controller
         if ($prof->delete()) {
             return [
                 'success' => true,
-                'message' => "Professeur supprimé avec succès"
+                'message' => "Professeur supprimé avec succès",
+                'profs' => Professor::all()
             ];
         } else {
             return [
