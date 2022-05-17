@@ -41,7 +41,6 @@ class ProfessorController extends Controller
         $professor->firstname = ucfirst($request->firstname);
         $professor->lastname = strtoupper($request->lastname);
         $professor->middlename = strtoupper($request->middlename);
-        $professor->email = $request->email;
         $professor->gender = strtoupper($request->sexe);
         $professor->user_id = $user->save();
 
@@ -60,6 +59,23 @@ class ProfessorController extends Controller
 
     public function index()
     {
-        return Professor::all();
+        return Professor::with('user')->get();
+    }
+
+    public function destroy($request)
+    {
+        $prof = Professor::find($request->id);
+
+        if ($prof->delete()) {
+            return [
+                'sucess' => true,
+                'message' => "Professeur supprimé avec succès"
+            ];
+        } else {
+            return [
+                'sucess' => false,
+                'message' => "Echec"
+            ];
+        }
     }
 }
