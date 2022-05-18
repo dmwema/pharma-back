@@ -44,7 +44,7 @@ class ProfessorController extends Controller
         $professor->gender = strtoupper($request->sexe);
         $user->save();
 
-        $professor->user->id;
+        $professor->user_id = $user->id;
         $professor->save();
 
         $user->professor_id = $professor->id;
