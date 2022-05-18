@@ -106,8 +106,9 @@ class ProfessorController extends Controller
     public function destroy(Request $request)
     {
         $prof = Professor::find($request->id);
+        $user = User::where('professor_id', $request->id)->first();
 
-        if ($prof->delete()) {
+        if ($prof->delete() && $user->delete()) {
             return [
                 'success' => true,
                 'message' => "Professeur supprimé avec succès",
