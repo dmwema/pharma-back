@@ -42,11 +42,12 @@ class ProfessorController extends Controller
         $professor->lastname = strtoupper($request->lastname);
         $professor->middlename = strtoupper($request->middlename);
         $professor->gender = strtoupper($request->sexe);
-        $professor->user_id = $user->save();
+        $user->save();
 
-        $prof_id = $professor->save();
+        $professor->user->id;
+        $professor->save();
 
-        $user->professor_id = $prof_id;
+        $user->professor_id = $professor->id;
         if ($user->save()) {
             return [
                 "success" => true,
