@@ -45,6 +45,7 @@ class ProfessorController extends Controller
         $professor->user_id = $user->save();
 
         if ($user->professor_id = $professor->save()) {
+            $user->save();
             return [
                 "success" => true,
                 'profs' => Professor::all(),
