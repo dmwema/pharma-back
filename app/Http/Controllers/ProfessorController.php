@@ -70,6 +70,8 @@ class ProfessorController extends Controller
             $user->email = $request->email;
         }
 
+        return $request;
+
         // store professor
         $professor = Professor::find($request->id);
         if ($request->firstname !== null) {
