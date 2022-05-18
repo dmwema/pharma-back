@@ -43,6 +43,9 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         $router->get('/professor', ['as' => 'all_professors', 'uses' => 'ProfessorController@index']);
 
+        $router->get('/user', ['as' => 'all_users', 'uses' => 'UserController@index']);
+
+
         $router->group(['prefix' => 'teacher'], function () use ($router) {
             $router->get('/courses/{teacher_id}', ['as' => 'teacher-courses', 'uses' => 'ProfessorController@courses']);
             $router->get('/works/{teacher_id}', ['as' => 'teacher-courses-works', 'uses' => 'ProfessorController@works']);

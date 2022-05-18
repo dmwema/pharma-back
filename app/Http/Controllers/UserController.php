@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function edit_credentials (Request $request) {
+    public function edit_credentials(Request $request)
+    {
         $link = $request->link;
         $email = $request->email;
         $pass = Hash::make($request->password);
@@ -30,7 +31,7 @@ class UserController extends Controller
         } else if ($user->student !== null) {
             $name = $user->student->firstname . " " . $user->student->lastname;
         }
-        
+
         if ($user->save()) {
 
             MailController::mail($name, $user->email, $request->password);
@@ -41,10 +42,11 @@ class UserController extends Controller
         }
     }
 
-    public function login (Request $request) {
+    public function login(Request $request)
+    {
         $email = $request->email;
         $password = $request->password;
-        
+
         $user = User::where('email', $email)->first();
 
         if ($user === null) {
@@ -72,5 +74,10 @@ class UserController extends Controller
             'success' => true,
             'user' => $user,
         ];
+    }
+
+    public function index()
+    {
+        return User::all();
     }
 }
