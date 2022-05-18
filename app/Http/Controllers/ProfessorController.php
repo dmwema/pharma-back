@@ -44,8 +44,10 @@ class ProfessorController extends Controller
         $professor->gender = strtoupper($request->sexe);
         $professor->user_id = $user->save();
 
-        if ($user->professor_id = $professor->save()) {
-            $user->save();
+        $prof_id = $professor->save();
+
+        $user->professor_id = $prof_id;
+        if ($user->save()) {
             return [
                 "success" => true,
                 'profs' => Professor::all(),
