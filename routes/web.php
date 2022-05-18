@@ -39,7 +39,9 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         $router->post('/delete-professor', ['as' => 'delete_professor', 'uses' => 'ProfessorController@destroy']);
 
-        $router->get('/professor', ['as' => 'all_professors', 'uses' => 'ProfessorController@index']);
+        $router->post('/delete-professor', ['as' => 'delete_professor', 'uses' => 'ProfessorController@destroy']);
+
+        $router->post('/update-professor', ['as' => 'update_professors', 'uses' => 'ProfessorController@update']);
 
         $router->group(['prefix' => 'teacher'], function () use ($router) {
             $router->get('/courses/{teacher_id}', ['as' => 'teacher-courses', 'uses' => 'ProfessorController@courses']);

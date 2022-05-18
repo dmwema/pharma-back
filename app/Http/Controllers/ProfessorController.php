@@ -63,6 +63,40 @@ class ProfessorController extends Controller
         return Professor::all();
     }
 
+    public function update(Request $request)
+    {
+        $user = User::where('professor_id', $request->id)->first();
+        if ($request->email !== null) {
+            $user->email = $request->email;
+        }
+
+        // store professor
+        $professor = Professor::find($request->id);
+        if ($request->firstname !== null) {
+            $professor->firstname = ucfirst($request->firstname);
+        }
+        if ($request->lastname !== null) {
+            $professor->lastname = strtoupper($request->lastname);
+        }
+        if ($request->middlename !== null) {
+            $professor->middlename = strtoupper($request->middlename);
+        }
+        if ($request->gender !== null) {
+            $professor->gender = strtoupper($request->gender);
+        }
+        if ($request->gender !== null) {
+            $professor->gender = $request->sexe;
+        }
+
+        if ($professor->save() && $user->save()) {
+            return [
+                'success' => true,
+                'message' => 'Informations mises à jour avec succès',
+                'profs' => Professor::all()
+            ];
+        }
+    }
+
     public function destroy(Request $request)
     {
         $prof = Professor::find($request->id);
