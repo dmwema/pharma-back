@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Jury;
+use App\Models\JuryMember;
+use App\Models\Professor;
+use Illuminate\Http\Request;
+
+class JuryController extends Controller
+{
+    private function get_jury($promotion_id)
+    {
+        $promotion = $promotion_id;
+        $jury = Jury::where('promotion_id', $promotion)->first();
+
+        $members = [];
+        $jury_members = JuryMember::where('jury_id', $jury->id)->get();
+
+        foreach ($jury_members as $m) {
+            $prof = Professor::find($m->professor_id);
+            $members[] = [
+                'id' => $prof->id,
+                'firstname' => $prof->firstname,
+                'lastname' => $prof->lastname,
+                'middlename' => $prof->middlename,
+                'role' => JuryMember::where('jury_id', $jury->id)->where('professor_id', $prof->id)->first()->role,
+            ];
+        }
+
+        return [
+            "jury" => $jury,
+            "members" => $members
+        ];
+    }
+
+    public function index(Request $request)
+    {
+        return $this->get_jury($request->promotion_id);
+    }
+
+    public function store(Request $request)
+    {
+        $jury = Jury::find($request->jury);
+        $prof = Professor::find($request->professor);
+        $role = (int) $request->role;
+
+
+        $jury_member = new JuryMember();
+        $jury_member->professor_id = $prof->id;
+        $jury_member->jury_id = $jury->id;
+        $jury_member->role = $role;
+
+        if ($jury_member->save()) {
+            return [
+                "success" => true,
+                'jury' => $this->get_jury($jury->promotion_id),
+                "message" => "Membre enrégistré avec succès"
+            ];
+        } else {
+            return [
+                "success" => false,
+                "message" => "Erreu! une erreur est survenie lors de l'enrégistrement"
+            ];
+        }
+    }
+
+    public function destroy(Request $request)
+    {
+        $prof = Professor::find($request->prof);
+        $jury = Jury::find($request->jury);
+
+        $jury_member = JuryMember::where('professor_id', $prof->id)->where('jury_id', $jury->id)->get(1);
+
+
+
+        if ($jury_member->delete()) {
+            return [
+                'success' => true,
+                'jury' => $this->get_jury($request->promotion),
+                'message' => "Membre retiré du bureau avec succès",
+                'profs' => Professor::all()
+            ];
+        } else {
+            return [
+                'sucess' => false,
+                'message' => "Echec"
+            ];
+        }
+    }
+}

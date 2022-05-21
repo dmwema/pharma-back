@@ -74,7 +74,7 @@ class ProfessorController extends Controller
 
             $return[] = [
                 'id' => $prof->id,
-                'firstname' => $prof->username,
+                'firstname' => $prof->firstname,
                 'lastname' => $prof->lastname,
                 'middlename' => $prof->middlename,
                 'email' => $user->email,
