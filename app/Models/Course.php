@@ -19,19 +19,23 @@ class Course extends Model
         'ponderation'
     ];
 
-    public function professors(){
+    public function professors()
+    {
         return $this->belongsToMany(Professor::class);
     }
 
-    public function examens(){
+    public function examens()
+    {
         return $this->hasMany(Examen::class);
     }
 
-    public function annual_works(){
+    public function annual_works()
+    {
         return $this->hasMany(AnnualWork::class);
     }
 
-    public function promotions(){
+    public function promotions()
+    {
         return $this->belongsToMany(Promotion::class);
     }
 }

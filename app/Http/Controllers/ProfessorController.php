@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AnnualWork;
 use App\Models\Course;
+use App\Models\LoginAccess;
 use App\Models\Professor;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -64,18 +65,39 @@ class ProfessorController extends Controller
 
     public function index()
     {
-        return Professor::all();
+        $profs =  Professor::all();
+        $return = [];
+
+        foreach ($profs as $prof) {
+            $user = User::find($prof->user_id);
+            $access = LoginAccess::where('user_id', $user->id)->first();
+
+            $return[] = [
+                'id' => $prof->id,
+                'firstname' => $prof->username,
+                'lastname' => $prof->lastname,
+                'middlename' => $prof->middlename,
+                'email' => $user->email,
+                'gender' => $prof->gender,
+                'user_id' => $prof->user_id,
+                'has_logins' => $access === null ? false : true,
+            ];
+        }
+
+        return $return;
     }
 
     public function update(Request $request)
     {
-        $user = User::where('professor_id', $request->id)->first();
+        // store professor
+        $professor = Professor::find($request->id);
+
+        $user = User::find($professor->user_id);
+
         if ($request->email !== null) {
             $user->email = $request->email;
         }
 
-        // store professor
-        $professor = Professor::find($request->id);
         if ($request->firstname !== null) {
             $professor->firstname = ucfirst($request->firstname);
         }

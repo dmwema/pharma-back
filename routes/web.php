@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\LoginAccessController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AdminController;
 
 /*
@@ -58,5 +59,11 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
             $router->post('/work', ['as' => 'add-work', 'uses' => 'AnnualWorkController@store']);
             $router->delete('/work', ['as' => 'delete-work', 'uses' => 'AnnualWorkController@destroy']);
         });
+
+        // COURSES
+        $router->get('/courses/{promotion_id}', ['as' => 'courses', 'uses' => 'CourseController@index']);
+        $router->post('/add-course', ['as' => 'store_course', 'uses' => 'CourseController@store']);
+        $router->post('/delete-course', ['as' => 'delete_course', 'uses' => 'CourseController@destroy']);
+        $router->post('/update-course', ['as' => 'update_course', 'uses' => 'CourseController@update']);
     });
 });

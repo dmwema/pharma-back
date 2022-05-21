@@ -16,11 +16,18 @@ class Promotion extends Model
         'department_id'
     ];
 
-    public function students(){
-        return $this->belongsToMany(Student::class)->withPivot(['year_start','year_off']);
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)->withPivot(['year_start', 'year_off']);
     }
 
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo(Department::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
     }
 }
