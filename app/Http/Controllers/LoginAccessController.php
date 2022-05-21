@@ -7,17 +7,41 @@ use Illuminate\Http\Request;
 
 class LoginAccessController extends Controller
 {
-        public function generate () {
+    public function generate(Request $request)
+    {
         $link = $this->randomString(6, 'link');
         $secret = $this->randomString(8, 'secret');
+        $user_id = $request->user_id;
 
-        return [
-            'link' => $link,
-            'secret' => $secret,
-        ];
+        $exists = LoginAccess::where('user_id', $user_id)->first();
+
+        if ($exists !== null) {
+            return [
+                'success' => false,
+                'message' => 'Les accèss de ce profésseur ont déjà été générés'
+            ];
+        }
+
+        $access = new LoginAccess();
+        $access->user_id = $user_id;
+        $access->link = $link;
+        $access->secret = $secret;
+        $access->is_used = 0;
+
+        if ($access->save()) {
+            return [
+                'success' => true,
+                'access' => $access
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Une érreur est survénue lors de la génération'
+            ];
+        }
     }
 
-    private function randomString ($lenght, $type)
+    private function randomString($lenght, $type)
     {
         $characters = ['0123456789', 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '#@/%!&*'];
         $randstring = [];
@@ -43,11 +67,12 @@ class LoginAccessController extends Controller
         return implode('', $randstring);
     }
 
-    public function check (Request $request) {
+    public function check(Request $request)
+    {
         $link = $request->link;
         $secret = $request->secret;
 
-        $access = LoginAccess::where('link', $link)->where('secret', $secret)->get(); 
+        $access = LoginAccess::where('link', $link)->where('secret', $secret)->get();
 
         if (count($access) > 0) {
             return [
@@ -60,21 +85,22 @@ class LoginAccessController extends Controller
         ];
     }
 
-    public function checklink (Request $request) {
-        
+    public function checklink(Request $request)
+    {
+
         $link = $request->link;
 
-        $access = LoginAccess::where('link', $link)->first(); 
+        $access = LoginAccess::where('link', $link)->first();
 
         if ($access !== null) {
 
-            if ($access ->is_used) {
+            if ($access->is_used) {
                 $datas = [
                     'success' => false,
                     'redirect' => true
                 ];
             }
-            
+
             $user = $access->user;
 
             $datas = [
@@ -90,7 +116,5 @@ class LoginAccessController extends Controller
             'success' => false,
             'redirect' => false
         ];
-
     }
-
 }

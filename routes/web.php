@@ -5,6 +5,8 @@
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\LoginAccessController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +27,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
             return $router->app->version();
         });
 
-        $router->get('/generate', ['as' => 'generate', 'uses' => 'LoginAccessController@generate']);
+        $router->post('/generate', ['as' => 'generate', 'uses' => 'LoginAccessController@generate']);
 
         $router->post('/check', ['as' => 'check', 'uses' => 'LoginAccessController@check']);
 
@@ -45,6 +47,9 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         $router->get('/user', ['as' => 'all_users', 'uses' => 'UserController@index']);
 
+        $router->get('/department', ['as' => 'get_depatments', 'uses' => 'DepartmentController@index']);
+
+        $router->post('/admin-pass-verification', ['as' => 'verify_admin_pass', 'uses' => 'AdminController@verify_pass']);
 
         $router->group(['prefix' => 'teacher'], function () use ($router) {
             $router->get('/courses/{teacher_id}', ['as' => 'teacher-courses', 'uses' => 'ProfessorController@courses']);

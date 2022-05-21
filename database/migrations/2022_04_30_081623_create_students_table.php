@@ -10,15 +10,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
+     * @return voidstudent
      */
     public function up()
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('middlename');
             $table->string('gender');
             $table->string('avatar')->nullable();
             $table->foreignId('user_id')->constrained();
