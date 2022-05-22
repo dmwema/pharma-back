@@ -110,9 +110,6 @@ class ProfessorController extends Controller
         if ($request->gender !== null) {
             $professor->gender = strtoupper($request->gender);
         }
-        if ($request->gender !== null) {
-            $professor->gender = $request->sexe;
-        }
 
         if ($professor->save() && $user->save()) {
             return [

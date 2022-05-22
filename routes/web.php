@@ -9,6 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JuryController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,5 +73,11 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/add-jury-member', ['as' => 'store_jury_member', 'uses' => 'JuryController@store']);
         $router->post('/delete-jury-member', ['as' => 'delete_jury_member', 'uses' => 'JuryController@destroy']);
         $router->post('/update-jury', ['as' => 'update_jury', 'uses' => 'JuryController@update']);
+
+        // STUDENTS
+        $router->get('/students/{promotion_id}', ['as' => 'students', 'uses' => 'StudentController@index']);
+        $router->post('/add-student', ['as' => 'store_student', 'uses' => 'StudentController@store']);
+        $router->post('/delete-student', ['as' => 'delete_student', 'uses' => 'StudentController@destroy']);
+        $router->post('/update-student', ['as' => 'update_student', 'uses' => 'StudentController@update']);
     });
 });
