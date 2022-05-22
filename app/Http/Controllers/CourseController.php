@@ -32,8 +32,6 @@ class CourseController extends Controller
 
     public function index(Request $request)
     {
-
-
         return $this->get_all($request);
     }
 
@@ -95,12 +93,8 @@ class CourseController extends Controller
             $course->ponderation = ucfirst($request->ponderation);
         }
 
-        if ($request->current_prof_id !== null) {
-            $course->current_prof_id = ucfirst($request->current_prof_id);
-        }
-
-        if ($request->current_promotion_id !== null) {
-            $course->current_promotion_id = ucfirst($request->current_promotion_id);
+        if ($request->professor !== null) {
+            $course->current_prof_id = $request->professor;
         }
 
         if ($course->save()) {

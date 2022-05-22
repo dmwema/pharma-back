@@ -71,5 +71,6 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->get('/jury/{promotion_id}', ['as' => 'jury', 'uses' => 'JuryController@index']);
         $router->post('/add-jury-member', ['as' => 'store_jury_member', 'uses' => 'JuryController@store']);
         $router->post('/delete-jury-member', ['as' => 'delete_jury_member', 'uses' => 'JuryController@destroy']);
+        $router->post('/update-jury', ['as' => 'update_jury', 'uses' => 'JuryController@update']);
     });
 });

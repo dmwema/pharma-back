@@ -70,9 +70,7 @@ class JuryController extends Controller
         $prof = Professor::find($request->prof);
         $jury = Jury::find($request->jury);
 
-        $jury_member = JuryMember::where('professor_id', $prof->id)->where('jury_id', $jury->id)->get(1);
-
-
+        $jury_member = JuryMember::where('professor_id', $prof->id)->where('jury_id', $jury->id)->first();
 
         if ($jury_member->delete()) {
             return [
@@ -85,6 +83,21 @@ class JuryController extends Controller
             return [
                 'sucess' => false,
                 'message' => "Echec"
+            ];
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $jury = Jury::find($request->id);
+        $jury->status = !$jury->status;
+
+        if ($jury->save()) {
+            $message = $jury->status ? 'activé' : 'desactivé';
+            return [
+                "success" => true,
+                "jury" => $this->get_jury($request->promotion),
+                "message" => 'Bureau du jury ' . $message . ' avec succès'
             ];
         }
     }
