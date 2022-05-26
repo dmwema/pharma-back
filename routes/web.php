@@ -30,6 +30,8 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
             return $router->app->version();
         });
 
+        $router->get('/send', ['as' => 'testemail', 'uses' => 'MailController@teste']);
+
         $router->post('/generate', ['as' => 'generate', 'uses' => 'LoginAccessController@generate']);
 
         $router->post('/check', ['as' => 'check', 'uses' => 'LoginAccessController@check']);
@@ -79,5 +81,21 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/add-student', ['as' => 'store_student', 'uses' => 'StudentController@store']);
         $router->post('/delete-student', ['as' => 'delete_student', 'uses' => 'StudentController@destroy']);
         $router->post('/update-student', ['as' => 'update_student', 'uses' => 'StudentController@update']);
+
+
+        // AUTH
+        $router->group([
+            'prefix' => 'auth',
+            'namespace' => 'Auth'
+        ], function () use ($router) {
+            $router->post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
+
+            $router->group([
+                'middleware' => 'auth:api',
+            ], function () use ($router) {
+                $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
+                $router->post('me', ['as' => 'me', 'uses' => 'AuthController@me']);
+            });
+        });
     });
 });

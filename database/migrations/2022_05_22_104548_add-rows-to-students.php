@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->string('email');
             $table->integer('current_promotion_id');
         });
     }

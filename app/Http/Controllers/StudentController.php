@@ -40,7 +40,6 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        return $request->email;
         $user = new User();
         $user->student_id = null;
         $user->professor_id = null;
@@ -54,6 +53,7 @@ class StudentController extends Controller
         $student->lastname = strtoupper($request->lastname);
         $student->middlename = strtoupper($request->middlename);
         $student->gender = strtoupper($request->sexe);
+        $student->current_promotion_id = $request->promotion_id;
         $user->save();
 
         $student->user_id = $user->id;

@@ -15,6 +15,7 @@ class UserController extends Controller
         $email = $request->email;
         $pass = Hash::make($request->password);
 
+
         $userLoginAcesses = LoginAccess::where('link', $link)->first();
 
         $userLoginAcesses->is_used = true;
@@ -34,7 +35,7 @@ class UserController extends Controller
 
         if ($user->save()) {
 
-            MailController::mail($name, $user->email, $request->password);
+            //MailController::mail($name, $user->email, $request->password);
 
             return [
                 'saved' => true

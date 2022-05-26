@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoginAccess;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LoginAccessController extends Controller
@@ -72,9 +73,9 @@ class LoginAccessController extends Controller
         $link = $request->link;
         $secret = $request->secret;
 
-        $access = LoginAccess::where('link', $link)->where('secret', $secret)->get();
+        $access = LoginAccess::where('link', $link)->where('secret', $secret)->first();
 
-        if (count($access) > 0) {
+        if ($access !== null) {
             return [
                 'success' => true
             ];
@@ -87,9 +88,7 @@ class LoginAccessController extends Controller
 
     public function checklink(Request $request)
     {
-
         $link = $request->link;
-
         $access = LoginAccess::where('link', $link)->first();
 
         if ($access !== null) {
@@ -101,15 +100,16 @@ class LoginAccessController extends Controller
                 ];
             }
 
-            $user = $access->user;
+            $user = User::find($access->user_id);
 
-            $datas = [
-                'success' => true,
-                'user' => $user,
-                'professor' => $user->professor
-            ];
-
-            return $datas;
+            if ($user !== null) {
+                $datas = [
+                    'success' => true,
+                    'user' => $user,
+                    'professor' => $user->professor
+                ];
+                return $datas;
+            }
         }
 
         return [

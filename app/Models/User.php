@@ -13,8 +13,10 @@ use App\Models\Student;
 use App\Models\Professor;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory, SoftDeletes;
 
@@ -24,7 +26,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var string[]
      */
     protected $fillable = [
-        'email', 'student_id','professor_id'
+        'email', 'student_id', 'professor_id'
     ];
 
     /**
@@ -37,27 +39,33 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'remember_token',
     ];
 
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class);
     }
 
-    public function professor(){
+    public function professor()
+    {
         return $this->belongsTo(Professor::class);
     }
 
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany(Role::class);
     }
 
-    public function login_access(){
+    public function login_access()
+    {
         return $this->belongsTo(LoginAccess::class);
     }
 
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims() {
+    public function getJWTCustomClaims()
+    {
         return [];
     }
 }
