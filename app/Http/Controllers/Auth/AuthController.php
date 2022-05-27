@@ -19,7 +19,9 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return dd($request->user());
+        $user = $request->user();
+
+        return $user;
     }
 
     public function logout(Request $request)

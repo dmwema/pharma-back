@@ -94,7 +94,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
                 'middleware' => 'auth:api',
             ], function () use ($router) {
                 $router->post('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
-                $router->post('me', ['as' => 'me', 'uses' => 'AuthController@me']);
+                $router->get('me', ['as' => 'me', 'uses' => 'AuthController@me']);
             });
         });
     });
