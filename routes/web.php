@@ -10,6 +10,8 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JuryController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\AnnualWorkController;
+use App\Http\Controllers\CoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,9 +61,10 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->group(['prefix' => 'teacher'], function () use ($router) {
             $router->get('/courses/{teacher_id}', ['as' => 'teacher-courses', 'uses' => 'ProfessorController@courses']);
             $router->get('/works/{teacher_id}', ['as' => 'teacher-courses-works', 'uses' => 'ProfessorController@works']);
+            $router->get('/works/with/{teacher_id}', ['as' => 'teacher-courses-works-with', 'uses' => 'ProfessorController@works_with']);
 
             $router->post('/work', ['as' => 'add-work', 'uses' => 'AnnualWorkController@store']);
-            $router->delete('/work', ['as' => 'delete-work', 'uses' => 'AnnualWorkController@destroy']);
+            $router->post('/delete_work', ['as' => 'delete-work', 'uses' => 'AnnualWorkController@destroy']);
         });
 
         // COURSES
@@ -82,6 +85,8 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/delete-student', ['as' => 'delete_student', 'uses' => 'StudentController@destroy']);
         $router->post('/update-student', ['as' => 'update_student', 'uses' => 'StudentController@update']);
 
+        //COTES
+        $router->get('/cotes/{promotion_id}', ['as' => 'cotes', 'uses' => 'CoteController@index']);
 
         // AUTH
         $router->group([

@@ -68,4 +68,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
+
+    public function with_datas()
+    {
+        if ($this->student_id !== null) {
+            // get prof datas
+            $student = Student::find($this->student_id);
+            return ['user' => $this, 'student' => $student, 'isProf' => false, 'isStudent' => true];
+        } else if ($this->professor_id !== null) {
+            // get student datas
+            $professor = Professor::find($this->professor_id);
+            return ['user' => $this, 'professor' => $professor, 'isProf' => true, 'isStudent' => false];
+        }
+
+        return $this;
+    }
 }

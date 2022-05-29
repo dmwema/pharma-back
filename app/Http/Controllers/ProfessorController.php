@@ -15,13 +15,23 @@ class ProfessorController extends Controller
     public function courses(Request $request)
     {
         $prof = Professor::findOrfail($request->teacher_id);
-        return response($prof->courses)
-            ->header('Access-Control-Allow-Origin', '*');
+        $courses = Course::where('current_prof_id', $prof->id)->get();
+
+        return $courses;
     }
 
     public function works(Request $request)
     {
-        $courses = Course::with('annual_works')->where('current_prof_id', $request->teacher_id)->get();
+        $courses = Course::with_annual_works($request->teacher_id);
+
+        return [
+            'courses' => $courses
+        ];
+    }
+
+    public function works_with(Request $request)
+    {
+        $courses = Course::with_annual_works_with($request->teacher_id);
 
         return [
             'courses' => $courses
@@ -53,7 +63,7 @@ class ProfessorController extends Controller
             return [
                 "success" => true,
                 'profs' => Professor::all(),
-                "message" => "Professeur enrégistré avec succès"
+                "message" => "Professeur enrégistré avec succès",
             ];
         } else {
             return [

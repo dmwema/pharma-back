@@ -14,7 +14,8 @@ class Session extends Model
         'title'
     ];
 
-    public function examens(){
+    public function examens()
+    {
         return $this->belongsToMany(Examen::class);
     }
 }

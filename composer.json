@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^8.0",
+        "doctrine/dbal": "^3.3",
         "flipbox/lumen-generator": "^9.1",
         "illuminate/auth": "^9.1.0",
         "illuminate/mail": "^9.10",

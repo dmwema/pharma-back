@@ -21,7 +21,7 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        return $user;
+        return $user->with_datas();
     }
 
     public function logout(Request $request)
