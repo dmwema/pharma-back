@@ -12,6 +12,7 @@ use App\Http\Controllers\JuryController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AnnualWorkController;
 use App\Http\Controllers\CoteController;
+use App\Http\Controllers\DeliberationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         //JURY
         $router->get('/jury/{promotion_id}', ['as' => 'jury', 'uses' => 'JuryController@index']);
+        $router->get('/post-jury/{promotion_id}/{professor_id}', ['as' => 'juryPosts', 'uses' => 'JuryController@posts']);
         $router->post('/add-jury-member', ['as' => 'store_jury_member', 'uses' => 'JuryController@store']);
         $router->post('/delete-jury-member', ['as' => 'delete_jury_member', 'uses' => 'JuryController@destroy']);
         $router->post('/update-jury', ['as' => 'update_jury', 'uses' => 'JuryController@update']);
@@ -87,6 +89,14 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
 
         //COTES
         $router->get('/cotes/{promotion_id}', ['as' => 'cotes', 'uses' => 'CoteController@index']);
+        $router->post('/update-cote', ['as' => 'update_cote', 'uses' => 'CoteController@update']);
+
+        //DELIBERATION
+        $router->get('/deliberations/{promotion}', ['as' => 'deliberation', 'uses' => 'DeliberationController@index']);
+        $router->post('/add-deliberation', ['as' => 'add-deliberation', 'uses' => 'DeliberationController@store']);
+        $router->post('/update-deliberation', ['as' => 'update_deliberation', 'uses' => 'DeliberationController@update']);
+        $router->post('/delete-deliberation', ['as' => 'delete_deliberation', 'uses' => 'DeliberationController@destroy']);
+        $router->post('/publish-deliberation', ['as' => 'publish_deliberation', 'uses' => 'DeliberationController@publish']);
 
         // AUTH
         $router->group([

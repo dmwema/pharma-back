@@ -34,6 +34,27 @@ class JuryController extends Controller
         ];
     }
 
+    private function posts($request)
+    {
+        $promotion = $request->promotion_id;
+        $professor = $request->professor_id;
+        $jury = Jury::where('promotion_id', $promotion)->first();
+
+        $jury_member = JuryMember::where('jury_id', $jury->id)->where('professor_id', $professor)->first();
+        $prof = Professor::find($professor);
+
+        if ($jury_member === null) {
+            return [
+                'is_member' => false
+            ];
+        }
+
+        return [
+            'is_member' => true,
+            'memberDatas' => $jury_member
+        ];
+    }
+
     public function index(Request $request)
     {
         return $this->get_jury($request->promotion_id);
