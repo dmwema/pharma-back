@@ -18,7 +18,7 @@ class CorsMiddleware
         $headers = [
             'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE',
             'Access-Control-Allow-Headers' => 'Content-Type, X-Auth-Token, Origin, Authorization',
-            'Access-Control-Allow-Origin' => env('FRONT_END_URI', 'https://delib-test.netlify.app/')
+            'Access-Control-Allow-Origin' => env('FRONT_END_URI', 'http://localhost:8080/')
 
         ];
 
