@@ -97,6 +97,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/update-deliberation', ['as' => 'update_deliberation', 'uses' => 'DeliberationController@update']);
         $router->post('/delete-deliberation', ['as' => 'delete_deliberation', 'uses' => 'DeliberationController@destroy']);
         $router->post('/publish-deliberation', ['as' => 'publish_deliberation', 'uses' => 'DeliberationController@publish']);
+        $router->post('/send-cotes', ['as' => 'send_cotes', 'uses' => 'StudentDeliberationController@sendCotes']);
 
         // AUTH
         $router->group([
