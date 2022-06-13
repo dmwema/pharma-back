@@ -90,6 +90,8 @@ class ProfessorController extends Controller
                 'email' => $user->email,
                 'gender' => $prof->gender,
                 'user_id' => $prof->user_id,
+                'link' => $access ? $access->link : '',
+                'secret' => $access ? $access->secret : '',
                 'has_logins' => $access === null ? false : true,
             ];
         }

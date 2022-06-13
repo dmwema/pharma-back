@@ -13,6 +13,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AnnualWorkController;
 use App\Http\Controllers\CoteController;
 use App\Http\Controllers\DeliberationController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\ExamScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +100,17 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/delete-deliberation', ['as' => 'delete_deliberation', 'uses' => 'DeliberationController@destroy']);
         $router->post('/publish-deliberation', ['as' => 'publish_deliberation', 'uses' => 'DeliberationController@publish']);
         $router->post('/send-cotes', ['as' => 'send_cotes', 'uses' => 'StudentDeliberationController@sendCotes']);
+
+        //SESSIONS
+        $router->get('/sessions/{promotion}', ['as' => 'session', 'uses' => 'SessionController@index']);
+        $router->post('/add-session', ['as' => 'add-session', 'uses' => 'SessionController@store']);
+        $router->post('/update-session', ['as' => 'update_session', 'uses' => 'SessionController@update']);
+        $router->post('/delete-session', ['as' => 'delete_session', 'uses' => 'SessionController@destroy']);
+
+        //SCHEDULES
+        $router->post('/add-schedule', ['as' => 'add-schedule', 'uses' => 'ExamScheduleController@store']);
+        $router->post('/update-schedule', ['as' => 'update_schedule', 'uses' => 'ExamScheduleController@update']);
+        $router->post('/delete-schedule', ['as' => 'delete_schedule', 'uses' => 'ExamScheduleController@destroy']);
 
         // AUTH
         $router->group([

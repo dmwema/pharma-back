@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jury;
 use App\Models\JuryMember;
 use App\Models\Professor;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 
 class JuryController extends Controller
@@ -66,6 +67,15 @@ class JuryController extends Controller
         $prof = Professor::find($request->professor);
         $role = (int) $request->role;
 
+        if ($jury === null) {
+            $jury = new Jury();
+            $jury->title = "Jury G1 Pharmacie";
+            $jury->promotion_id = 1;
+            $jury->status = 0;
+            $jury->save();
+        }
+
+        $promotion = Promotion::find($jury->promotion_id);
 
         $jury_member = new JuryMember();
         $jury_member->professor_id = $prof->id;

@@ -11,7 +11,24 @@ class DeliberationController extends Controller
 {
     public function index(Request $request)
     {
-        return Deliberation::where('promotion', $request->promotion)->get();
+        $deliberations = Deliberation::where('promotion', $request->promotion)->get();
+        $return = [];
+
+        foreach ($deliberations as $deliberation) {
+            $return[] = [
+                'id' => $deliberation->id,
+                'promotion  ' => $deliberation->promotion,
+                'date' => $deliberation->date,
+                'message' => $deliberation->message,
+                'destination' => $deliberation->destination,
+                'created_at' => $deliberation->created_at,
+                'title' => $deliberation->title,
+                'published' => $deliberation->published,
+                'cotes' => DeliberationCourse::get_all($deliberation->id)
+            ];
+        }
+
+        return $return;
     }
 
     public function store(Request $request)
