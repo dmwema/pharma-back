@@ -8,8 +8,6 @@ use App\Models\Examen;
 
 class Session extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
         'title'
     ];

@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 class SessionController extends Controller
 {
 
-    public function index(Request $request)
+    public function get_all($promotion)
     {
-        $promotion = $request->promotion;
         $return = [];
         $sessions = Session::where('promotion_id', $promotion)->get();
-
+        $i = 0;
         foreach ($sessions as $session) {
+            $i++;
             $sch = [];
             $schedules = ExamSchedule::where('session_id', $session->id)->get();
             foreach ($schedules as $schedule) {
@@ -23,6 +23,7 @@ class SessionController extends Controller
             }
             $return[] = [
                 'id' => $session->id,
+                'key' => $i,
                 'title' => $session->title,
                 'start' => $session->start,
                 'end' => $session->end,
@@ -32,6 +33,13 @@ class SessionController extends Controller
         }
 
         return $return;
+    }
+
+    public function index(Request $request)
+    {
+        return [
+            'sessions' => $this->get_all($request->promotion_id),
+        ];
     }
 
     public function store(Request $request)
@@ -46,7 +54,8 @@ class SessionController extends Controller
 
         return [
             'success' => true,
-            'message' => "Session enrégistrée avec succès"
+            'message' => "Session enrégistrée avec succès",
+            'sessions' => $this->get_all($request->promotion_id)
         ];
     }
 
@@ -74,12 +83,13 @@ class SessionController extends Controller
 
     public function destroy(Request $request)
     {
-        $session = Session::find($request->id);
+        $session = Session::find($request->session_id);
 
         if ($session->delete()) {
             return [
                 'success' => true,
                 'message' => "Session supprimée de la base de données avec succès",
+                'sessions' => $this->get_all($request->promotion_id)
             ];
         } else {
             return [

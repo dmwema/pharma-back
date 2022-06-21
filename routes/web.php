@@ -102,7 +102,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/send-cotes', ['as' => 'send_cotes', 'uses' => 'StudentDeliberationController@sendCotes']);
 
         //SESSIONS
-        $router->get('/sessions/{promotion}', ['as' => 'session', 'uses' => 'SessionController@index']);
+        $router->get('/sessions/{promotion_id}', ['as' => 'session', 'uses' => 'SessionController@index']);
         $router->post('/add-session', ['as' => 'add-session', 'uses' => 'SessionController@store']);
         $router->post('/update-session', ['as' => 'update_session', 'uses' => 'SessionController@update']);
         $router->post('/delete-session', ['as' => 'delete_session', 'uses' => 'SessionController@destroy']);
