@@ -45,7 +45,7 @@ class Course extends Model
         $courses = Course::where('current_prof_id', $teacher_id)->get();
         $courses_ret = [];
         foreach ($courses as $course) {
-            $annual_w = AnnualWork::where('course_id', $course->id)->get();
+            $annual_w = AnnualWork::where('course_id', $course->id)->where('session_id', null)->get();
 
             $courses_ret[] = [
                 'id' => $course->id,

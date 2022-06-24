@@ -17,7 +17,7 @@ class SessionController extends Controller
         foreach ($sessions as $session) {
             $i++;
             $sch = [];
-            $schedules = ExamSchedule::where('session_id', $session->id)->get();
+            $schedules = ExamSchedule::get_all($session->id);
             foreach ($schedules as $schedule) {
                 $sch[] = $schedule;
             }
