@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnnualWork;
 use App\Models\Course;
+use App\Models\Deliberation;
 use App\Models\Professor;
 use App\Models\Promotion;
+use App\Models\Session;
+use App\Models\Student;
+use App\Models\StudentWork;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -104,5 +109,70 @@ class CourseController extends Controller
                 'courses' => $this->get_all($request)
             ];
         }
+    }
+
+    public function all_course_cotes(Request $request)
+    {
+        $course = Course::find($request->course_id);
+        $students = Student::where('current_promotion_id', $course->current_promotion_id)->get();
+        $delib = Deliberation::find($request->session_id);
+
+        $i = 0;
+
+        $return = [];
+
+        $columns = [
+            'Etudiant'
+        ];
+
+        $works = AnnualWork::where('course_id', $course->id)->where('session_id', null)->get();
+        $exam = AnnualWork::where('course_id', $course->id)->where('session_id', $delib->session_id)->first();
+
+        foreach ($works as $work) {
+            $columns[] = $work->title;
+        }
+        $columns[] = 'TOT. ANN.';
+        $columns[] = 'EXAM.';
+        $columns[] = 'MOY.';
+
+        foreach ($students as $student) {
+            $ret_et = [];
+            $ret_et[] = $student->lastname . ' ' . $student->middlename . ' ' . $student->firstname;
+            $i++;
+
+            $has_ann_null = false;
+            $has_exam_null = false;
+
+            $j = 0;
+            foreach ($works as $work) {
+                $s_w = StudentWork::where('student_id', $student->id)->where('work_id', $work->id)->first();
+
+                if ($s_w->cote === null) {
+                    $has_ann_null = true;
+                }
+
+                $ret_et[] = $s_w->cote;
+            }
+
+            $k = 0;
+            $s_w_e = StudentWork::where('student_id', $student->id)->where('work_id', $exam->id)->first();
+
+            if ($s_w_e->cote === null) {
+                $has_exam_null = true;
+            }
+
+            $ret_et[] = 10;
+
+            $ret_et[] = $s_w_e->cote;
+
+            $ret_et[] = 10;
+
+            $return[] = $ret_et;
+        }
+
+        return [
+            'datas' => $return,
+            'columns' => $columns
+        ];
     }
 }

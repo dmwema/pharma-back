@@ -75,6 +75,7 @@ $router->group(['middleware' => 'cors'], function () use ($router) {
         $router->post('/add-course', ['as' => 'store_course', 'uses' => 'CourseController@store']);
         $router->post('/delete-course', ['as' => 'delete_course', 'uses' => 'CourseController@destroy']);
         $router->post('/update-course', ['as' => 'update_course', 'uses' => 'CourseController@update']);
+        $router->get('/courses/all-cotes/{course_id}-{session_id}', ['as' => 'all_course_cotes', 'uses' => 'CourseController@all_course_cotes']);
 
         //JURY
         $router->get('/jury/{promotion_id}', ['as' => 'jury', 'uses' => 'JuryController@index']);

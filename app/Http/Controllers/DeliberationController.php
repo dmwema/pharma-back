@@ -35,6 +35,7 @@ class DeliberationController extends Controller
     {
         $date = $request->date;
         $promotion = $request->promotion_id;
+        $session_id = $request->session_id;
         $title = $request->title;
         $message = $request->message;
         $destination = $request->destination ?? '1-2-3';
@@ -47,6 +48,7 @@ class DeliberationController extends Controller
         $deliberation = new Deliberation();
         $deliberation->date = $date;
         $deliberation->promotion = $promotion;
+        $deliberation->session_id = $session_id;
         $deliberation->title = $title;
         $deliberation->message = $message;
         $deliberation->destination = $destination;
