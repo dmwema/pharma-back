@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AnnualWork;
+use App\Models\Course;
 use App\Models\Deliberation;
+use App\Models\Session;
 use App\Models\Student;
 use App\Models\StudentDeliberation;
 use App\Models\StudentWork;
@@ -13,66 +15,75 @@ class StudentDeliberationController extends Controller
 {
     public function sendCotes(Request $request)
     {
-        $cotes = $request->cotes;
-        $annual = $cotes->annual;
-        $exam = $cotes->exam;
-        $promotion_id = $request->promotion_id;
-        $course_id = $request->course_id;
-        $works = AnnualWork::where('course_id', $course_id);
+        $course = Course::find($request->course_id);
+        $delib = Deliberation::find($request->session_id);
 
-        $students = Student::where('current_promotion_id', $promotion_id)->get();
+        $works = AnnualWork::where('course_id', $course->id)->where('session_id', null)->get();
+        $exam = AnnualWork::where('course_id', $course->id)->where('session_id', $delib->session_id)->first();
+
+        $students = Student::where('current_promotion_id', $course->current_promotion_id)->orderBy('lastname')->get();
 
         foreach ($students as $student) {
-            $annual_st = null;
+
+            $has_ann_null = false;
+            $has_exam_null = false;
+
+            $moy = null;
             $exam_st = null;
-            $annual_arr = [];
-            $exam_arr = [];
+            $exam_st = null;
 
             foreach ($works as $work) {
-                $student_cote = StudentWork::where('student_id', $student->id)->where('work_id', $work->id)->first();
-                if ($annual[$work->id]) {
-                    $work = AnnualWork::find($work->id);
-                    $annual_arr[$work->max] = $student_cote->cote;
-                }
-                if ($exam[$work->id]) {
-                    $work = AnnualWork::find($work->id);
-                    $exam_arr[$work->max] = $student_cote->cote;
-                }
-            }
+                $s_w = StudentWork::where('student_id', $student->id)->where('work_id', $work->id)->first();
 
-            $cote = 0;
-            $i = 0;
-            $has_empty = null;
-
-            foreach ($annual_arr as $max => $value) {
-                $i++;
-                if ($value === null) {
-                    $has_empty = true;
+                if ($s_w === null) {
+                    $has_ann_null = true;
                 } else {
-                    $cote_20 = 20 * $value / $max;
-                    $cote += $cote_20;
+                    if ($s_w->cote === null) {
+                        $has_ann_null = true;
+                    }
                 }
             }
 
-            if (!$has_empty) {
-                $cote_to_save = $cote / $i;
-                $student_deliberation = new StudentDeliberation();
-                $student_deliberation->student_id = $student->id;
-
-                $student_deliberation->deliberation_id = $promotion_id;
-                $student_deliberation->cote = $cote_to_save;
-
-                $student_deliberation->save();
+            $t = 0;
+            if (!$has_ann_null) {
+                $moy = 0;
+                foreach ($works as $work) {
+                    $t++;
+                    $s_w = StudentWork::where('student_id', $student->id)->where('work_id', $work->id)->first();
+                    $moy += $s_w->cote / $work->max;
+                }
+                $annual_st =  $has_ann_null ? null : ceil($moy * 20 / $t);
             } else {
-                $student_deliberation = new StudentDeliberation();
-                $student_deliberation->student_id = $student->id;
+                $annual_st = null;
+            }
 
-                $student_deliberation->deliberation_id = $promotion_id;
-                $student_deliberation->cote = null;
+            $s_w_e = StudentWork::where('student_id', $student->id)->where('work_id', $exam->id)->first();
 
-                $student_deliberation->save();
+            if ($s_w_e === null) {
+                $exam_st = null;
+            } else {
+                if ($s_w_e->cote === null) {
+                    $exam_st = null;
+                }
+                $exam_st = $has_exam_null || $has_ann_null ? null : ceil((($moy * 20 / $t) + $s_w_e->cote) / 2); // moy total
+            }
+
+            $stud_delib = StudentDeliberation::where('student_id', $student->id)->where('deliberation_id', $delib->id)->first();
+
+            if ($stud_delib === null) {
+                $stud_delib = StudentDeliberation::create([
+                    'exam' => $exam_st,
+                    'annual' => $annual_st,
+                    'student_id' => $student->id,
+                    'deliberation_id' => $delib->id,
+                    'cote' => ceil(($annual_st + $exam_st) / 2)
+                ]);
             }
         }
-        return StudentDeliberation::where('promotion_id', $promotion_id);
+
+        return [
+            'success' => true,
+            'message' => 'Cotes envoyés avec succès'
+        ];
     }
 }

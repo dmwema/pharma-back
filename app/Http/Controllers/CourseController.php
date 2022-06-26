@@ -114,7 +114,7 @@ class CourseController extends Controller
     public function all_course_cotes(Request $request)
     {
         $course = Course::find($request->course_id);
-        $students = Student::where('current_promotion_id', $course->current_promotion_id)->get();
+        $students = Student::where('current_promotion_id', $course->current_promotion_id)->orderBy('lastname')->get();
         $delib = Deliberation::find($request->session_id);
 
         $i = 0;
@@ -144,28 +144,48 @@ class CourseController extends Controller
             $has_exam_null = false;
 
             $j = 0;
+
+            $moy = null;
+
             foreach ($works as $work) {
                 $s_w = StudentWork::where('student_id', $student->id)->where('work_id', $work->id)->first();
 
-                if ($s_w->cote === null) {
+                if ($s_w === null) {
                     $has_ann_null = true;
+                    $ret_et[] = null;
+                } else {
+                    if ($s_w->cote === null) {
+                        $has_ann_null = true;
+                    }
+                    $ret_et[] = $s_w->cote;
                 }
-
-                $ret_et[] = $s_w->cote;
             }
 
-            $k = 0;
+            $t = 0;
+            if (!$has_ann_null) {
+                $moy = 0;
+                foreach ($works as $work) {
+                    $t++;
+                    $s_w = StudentWork::where('student_id', $student->id)->where('work_id', $work->id)->first();
+                    $moy += $s_w->cote / $work->max;
+                }
+            }
+
             $s_w_e = StudentWork::where('student_id', $student->id)->where('work_id', $exam->id)->first();
 
-            if ($s_w_e->cote === null) {
+            if ($s_w_e === null) {
                 $has_exam_null = true;
+                $ret_et[] = null; // moy ann
+                $ret_et[] = null; //exam
+                $ret_et[] = null; // moy total
+            } else {
+                if ($s_w_e->cote === null) {
+                    $has_exam_null = true;
+                }
+                $ret_et[] = $has_ann_null ? null : ceil($moy * 20 / $t); // moy ann
+                $ret_et[] = $s_w_e->cote; //exam
+                $ret_et[] = $has_exam_null || $has_ann_null ? null : ceil((($moy * 20 / $t) + $s_w_e->cote) / 2); // moy total
             }
-
-            $ret_et[] = 10;
-
-            $ret_et[] = $s_w_e->cote;
-
-            $ret_et[] = 10;
 
             $return[] = $ret_et;
         }
